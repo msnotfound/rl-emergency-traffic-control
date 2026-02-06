@@ -1,0 +1,7 @@
+<routes>
+    <vType id="ambulance_type" vClass="emergency" guiShape="emergency" speedDev="0" color="red">
+        <param key="has.bluelight.device" value="true"/>
+    </vType>
+
+    <trip id="hero_ambulance" type="ambulance_type" depart="120" from="-E2" to="E4" departPos="last"/>
+</routes>
