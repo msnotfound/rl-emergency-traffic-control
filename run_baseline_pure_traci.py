@@ -41,7 +41,7 @@ def run_pure_baseline():
         step += 1
         
         # Slow down slightly so you can see it
-        time.sleep(0.00) 
+        time.sleep(0.10) 
 
         # Track the Ambulance
         # We wrap this in try-catch to prevent crashes if TraCI hiccups
