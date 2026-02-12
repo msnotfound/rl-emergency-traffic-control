@@ -77,7 +77,9 @@ def test_optimized():
     done = False
     ambulance_start = 0
     ambulance_end = 0
+    ambulance_duration = 0
     step = 0
+    vehicle_waiting_times = {}  # Track max waiting time per vehicle
     
     print("🚦 Starting Optimized Evaluation Run...")
     
@@ -92,7 +94,7 @@ def test_optimized():
         obs, reward, done, info = env.step(action)
         
         # Slow down visualization so you can see the cars
-        time.sleep(0.05)
+        # time.sleep(0.05)
         
         step += 1
         
@@ -104,6 +106,14 @@ def test_optimized():
             # Print status every 20 steps
             if step % 20 == 0:
                 print(f"   [Debug] Time: {current_time}s | Vehicles on road: {len(veh_list)}")
+            
+            # Track max waiting time for each civilian vehicle
+            for veh_id in veh_list:
+                if veh_id != "hero_ambulance":
+                    waiting = traci.vehicle.getWaitingTime(veh_id)
+                    # Keep the maximum waiting time seen for this vehicle
+                    if veh_id not in vehicle_waiting_times or waiting > vehicle_waiting_times[veh_id]:
+                        vehicle_waiting_times[veh_id] = waiting
 
             # Check for ambulance
             if "hero_ambulance" in veh_list:
@@ -114,10 +124,10 @@ def test_optimized():
             # Check if finished
             if ambulance_start > 0 and "hero_ambulance" not in veh_list and ambulance_end == 0:
                 ambulance_end = current_time
-                duration = ambulance_end - ambulance_start
-                print(f"🏁 Optimized Agent Finished! Total Time: {duration} seconds")
-                # Uncomment to exit immediately after ambulance finishes
-                # break
+                ambulance_duration = ambulance_end - ambulance_start
+                print(f"🏁 Optimized Agent Finished! Total Time: {ambulance_duration} seconds")
+                # Exit immediately after ambulance finishes to avoid multi-episode data
+                break
 
         except Exception as e:
             print(f"❌ Error: {e}")
@@ -125,6 +135,21 @@ def test_optimized():
 
     env.close()
     print("✅ Evaluation Complete.")
+    
+    # Calculate civilian average waiting time
+    if vehicle_waiting_times:
+        civilian_avg_wait = sum(vehicle_waiting_times.values()) / len(vehicle_waiting_times)
+    else:
+        civilian_avg_wait = 0
+    
+    # Save results to file for plotting
+    with open("optimized_result.txt", "w") as f:
+        f.write(f"{ambulance_duration}\n")
+        f.write(f"{civilian_avg_wait}\n")
+    print(f"📊 Optimized ambulance time: {ambulance_duration}s")
+    print(f"📊 Optimized civilian avg waiting time: {civilian_avg_wait:.2f}s")
+    
+    return ambulance_duration, civilian_avg_wait
 
 if __name__ == "__main__":
     test_optimized()

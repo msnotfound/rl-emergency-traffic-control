@@ -29,9 +29,9 @@ def custom_ambulance_reward(traffic_signal):
     except:
         pass
 
-    # Combine: We weight the civilian penalty down slightly so the ambulance 
-    # signal "pops" more clearly to the AI.
-    reward = -1 * ((civilian_penalty * 0.1) + ambulance_penalty)
+    # Combine: Balance ambulance priority with civilian traffic flow
+    # Increase civilian weight if they're waiting too long
+    reward = -1 * ((civilian_penalty * 0.7) + ambulance_penalty)
     return reward
 
 def train_optimized():
@@ -50,7 +50,7 @@ def train_optimized():
         net_file=net_file,
         route_file=route_file,
         fixed_ts=False,
-        out_csv_name=None,
+        out_csv_name="training_results",
         use_gui=False,
         num_seconds=1000,  # Longer episodes = better learning of consequences
         yellow_time=4,
