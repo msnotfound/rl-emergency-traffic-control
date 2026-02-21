@@ -11,12 +11,19 @@ else:
     sys.exit("please declare environment variable 'SUMO_HOME'")
 
 def run_pure_baseline():
-    print("🚀 Starting Pure TraCI Baseline...")
+    print("🚀 Starting Pure TraCI Baseline (Fixed Timers)...")
     
     # 1. Define the command to start SUMO
-    # We load the config file directly, which already lists your network and routes
     sumoBinary = "sumo-gui" # Use "sumo" for headless
-    sumoCmd = [sumoBinary, "-c", "draft02.sumocfg", "--start"]
+    
+    # 🚨 CRITICAL FIX: Do not use the .sumocfg. Force it to load the EXACT same 
+    # network and route files as the RL test script to ensure a 100% fair comparison.
+    sumoCmd = [
+        sumoBinary, 
+        "-n", "draft02.net.xml", 
+        "-r", "vtypes.rou.xml,traffic_dense.rou.xml,ambulance_s.rou.xml", 
+        "--start"
+    ]
 
     # 2. Start the simulation
     traci.start(sumoCmd)
@@ -34,38 +41,41 @@ def run_pure_baseline():
     except:
         pass
 
-    print("🚦 Simulation Running... (Look at the GUI window)")
+    print("🚦 Simulation Running... (Fixed Timers)")
 
     # 5. The Main Loop
-    # Run until time 600 OR until all cars are gone
     while step < 1000:
         traci.simulationStep() # Move one step forward
         step += 1
         
         # Slow down slightly so you can see it
-        # time.sleep(0.10) 
+        time.sleep(.50) 
 
         # Track the Ambulance and civilian waiting times
-        # We wrap this in try-catch to prevent crashes if TraCI hiccups
         try:
+            current_time = traci.simulation.getTime()
             vehicle_list = traci.vehicle.getIDList()
             
+            # Print status every 20 steps (Matches RL script)
+            if step % 20 == 0:
+                print(f"   [Debug] Time: {current_time}s | Vehicles on road: {len(vehicle_list)}")
+
             # Track max waiting time for each civilian vehicle
             for veh_id in vehicle_list:
                 if veh_id != "hero_ambulance":
-                    waiting = traci.vehicle.getWaitingTime(veh_id)
+                    waiting = traci.vehicle.getAccumulatedWaitingTime(veh_id)
                     # Keep the maximum waiting time seen for this vehicle
                     if veh_id not in vehicle_waiting_times or waiting > vehicle_waiting_times[veh_id]:
                         vehicle_waiting_times[veh_id] = waiting
             
             if "hero_ambulance" in vehicle_list:
                 if ambulance_start == 0:
-                    ambulance_start = traci.simulation.getTime()
+                    ambulance_start = current_time
                     print(f"🚑 Ambulance entered at time: {ambulance_start}")
             
             # Check if it finished
             if ambulance_start > 0 and "hero_ambulance" not in vehicle_list and ambulance_end == 0:
-                ambulance_end = traci.simulation.getTime()
+                ambulance_end = current_time
                 ambulance_duration = ambulance_end - ambulance_start
                 print(f"🏁 Ambulance FINISHED! Total Time: {ambulance_duration} seconds")
                 # Stop immediately after ambulance finishes for fair comparison
@@ -73,9 +83,10 @@ def run_pure_baseline():
                 
         except Exception as e:
             print(f"⚠️ Error checking vehicle: {e}")
+            break
 
     # 6. Clean up
-    print("✅ Simulation Finished.")
+    print("✅ Baseline Simulation Finished.")
     traci.close()
     
     # 7. Calculate civilian average waiting time

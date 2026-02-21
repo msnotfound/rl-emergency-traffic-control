@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes>
+    <!-- Dense traffic flows for S-scenario (300+ vehicles) -->
+    
+    <!-- J4 Intersection Incoming Flows -->
+    <!-- From North (J5 to J4) -->
+    <flow id="flow_north_j4" from="-E2" to="E4" begin="0" end="1000" probability="0.15" type="civilian_car"/>
+    <flow id="flow_north_j4_cross" from="-E2" to="E3" begin="0" end="1000" probability="0.12" type="civilian_car"/>
+    
+    <!-- From West (J3 to J4) -->
+    <flow id="flow_west_j4" from="E1" to="E3" begin="0" end="1000" probability="0.15" type="civilian_car"/>
+    <flow id="flow_west_j4_cross" from="E1" to="E2" begin="0" end="1000" probability="0.10" type="civilian_car"/>
+    
+    <!-- From South (J7 to J4) -->
+    <flow id="flow_south_j4" from="-E4" to="E2" begin="0" end="1000" probability="0.15" type="civilian_car"/>
+    <flow id="flow_south_j4_cross" from="-E4" to="-E1" begin="0" end="1000" probability="0.12" type="civilian_car"/>
+    
+    <!-- From East (J6 to J4 via E3) -->
+    <flow id="flow_east_j4" from="-E3" to="-E1" begin="0" end="1000" probability="0.15" type="civilian_car"/>
+    <flow id="flow_east_j4_cross" from="-E3" to="E2" begin="0" end="1000" probability="0.10" type="civilian_car"/>
+    
+    <!-- J6 Intersection Incoming Flows -->
+    <!-- From North (J8 to J6) -->
+    <flow id="flow_north_j6" from="-E5" to="E6" begin="0" end="1000" probability="0.15" type="civilian_car"/>
+    <flow id="flow_north_j6_cross" from="-E5" to="E7" begin="0" end="1000" probability="0.12" type="civilian_car"/>
+    
+    <!-- From East (J10 to J6) -->
+    <flow id="flow_east_j6" from="-E7" to="-E3" begin="0" end="1000" probability="0.15" type="civilian_car"/>
+    <flow id="flow_east_j6_cross" from="-E7" to="E6" begin="0" end="1000" probability="0.10" type="civilian_car"/>
+    
+    <!-- From South (J9 to J6) -->
+    <flow id="flow_south_j6" from="-E6" to="E5" begin="0" end="1000" probability="0.15" type="civilian_car"/>
+    <flow id="flow_south_j6_cross" from="-E6" to="-E3" begin="0" end="1000" probability="0.12" type="civilian_car"/>
+    
+    <!-- From West (J4 to J6 via E3) - Heavy traffic on ambulance route -->
+    <flow id="flow_west_j6" from="E3" to="E7" begin="0" end="1000" probability="0.15" type="civilian_car"/>
+    <flow id="flow_west_j6_cross" from="E3" to="E5" begin="0" end="1000" probability="0.12" type="civilian_car"/>
+</routes>

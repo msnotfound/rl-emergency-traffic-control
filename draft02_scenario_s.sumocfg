@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
+    <input>
+        <net-file value="draft02.net.xml"/>
+        <route-files value="vtypes.rou.xml,traffic_dense.rou.xml,ambulance_s.rou.xml"/>
+    </input>
+    <time>
+        <begin value="0"/>
+        <end value="1000"/>
+    </time>
+</configuration>

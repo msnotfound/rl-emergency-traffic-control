@@ -8,7 +8,6 @@ import sumo_rl
 import traci
 import os
 import torch.nn as nn
-import zlib  # 🚨 THE FIX: Added zlib for deterministic hashing 🚨
 
 class AmbulanceObservationWrapper(gym.ObservationWrapper):
     """
@@ -37,9 +36,9 @@ class AmbulanceObservationWrapper(gym.ObservationWrapper):
             veh_list = traci.vehicle.getIDList()
             if "hero_ambulance" in veh_list:
                 lane_id = traci.vehicle.getLaneID("hero_ambulance")
-                # 🚨 THE FIX: zlib.crc32 guarantees the lane name maps to the EXACT 
-                # same index during both training and testing, every single time.
-                lane_idx = zlib.crc32(lane_id.encode('utf-8')) % self.add_dim
+                # Create a simple hash or index mapping for the lane
+                # This helps the AI identify 'Which lane has the emergency'
+                lane_idx = abs(hash(lane_id)) % self.add_dim
                 ambulance_pos[lane_idx] = 1.0
         except:
             pass

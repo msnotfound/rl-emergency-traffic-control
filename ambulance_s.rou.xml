@@ -1,0 +1,24 @@
+<routes>
+    <vType id="ambulance_type" vClass="emergency" guiShape="emergency" speedFactor="1.5" maxSpeed="30" color="red">
+        <param key="has.bluelight.device" value="true"/>
+    </vType>
+
+    <trip id="hero_ambulance" type="ambulance_type" depart="5" from="-E2" to="E5" via="E3" departPos="free" departLane="free" departSpeed="max"/>
+    
+</routes>
+
+<!-- <?xml version="1.0" encoding="UTF-8"?>
+<routes>
+    Vehicle type definition for ambulance
+    <vType id="ambulance_type" vClass="emergency" guiShape="emergency" speedDev="0" color="red"/>
+
+
+    S-shaped ambulance route:
+         - Starts at -E2 (north of J4)
+         - Right turn at J4 onto E3 (connecting edge)
+         - Right turn at J6 onto E5 (exit north of J6)
+   
+    <trip id="hero_ambulance" type="ambulance_type" depart="5" from="-E2" to="E5" departPos="last">
+        <stop lane="E3_0" duration="0.1"/>  Force route through E3
+    </trip>
+</routes> -->

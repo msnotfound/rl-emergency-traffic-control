@@ -1,0 +1,7 @@
+{
+  "ambulance_total_time": 118.0,
+  "civilian_avg_wait": 17.147222222222222,
+  "j4_crossing_time": 62.0,
+  "j6_crossing_time": 54.0,
+  "total_vehicles": 360
+}
