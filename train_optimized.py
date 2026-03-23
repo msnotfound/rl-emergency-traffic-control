@@ -20,6 +20,7 @@ class AmbulanceObservationWrapper(gym.ObservationWrapper):
     def __init__(self, env):
         super().__init__(env)
         # We add 1 extra bit per lane to the observation space
+
         # Standard sumo-rl obs for 2 intersections is roughly 40-50 dims. 
         # We append the 'Ambulance Presence' per lane.
         orig_shape = self.observation_space.shape[0]
