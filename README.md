@@ -15,6 +15,11 @@ Traditional fixed-time traffic signals cannot adapt to dynamic traffic condition
 
 Our RL-based solution dynamically adjusts traffic signals to clear paths for ambulances while minimizing disruption to civilian traffic.
 
+## 📸 Demo
+
+<!-- TODO: add a screenshot or short GIF of the SUMO GUI: the trained agent giving the ambulance a green wave vs the fixed-time baseline. -->
+_Demo coming soon — SUMO GUI showing the agent clearing an ambulance path through the intersection._
+
 ## 🛠️ Technical Stack
 
 - **RL Framework**: Stable-Baselines3 (PPO)
@@ -58,6 +63,7 @@ export SUMO_HOME="/usr/share/sumo"  # Adjust path as needed
 python train_optimized.py
 ```
 - Training runs for 100,000 timesteps
+- Wall-clock: CPU-bound (no GPU needed); SUMO stepping dominates. Expect roughly tens of minutes to ~1–2 hours for the full run. _(TODO: drop in your measured time.)_
 - Checkpoints saved every 10,000 steps to `./models/`
 - Final model: `optimized_traffic_agent.zip`
 - Normalization stats: `vec_normalize.pkl`
@@ -167,6 +173,10 @@ shimmy
 torch
 ```
 
+## Status
+
+Research prototype, paused. Single-intersection scenario validated in simulation: ~70% reduction in ambulance travel time (~17s → ~5s) versus a fixed-time baseline. Simulation-only — not validated for real-world deployment (see the note at the bottom).
+
 ## 🤝 Contributing
 
 This is an academic/research project. Key areas for improvement:
@@ -177,7 +187,7 @@ This is an academic/research project. Key areas for improvement:
 
 ## 📄 License
 
-Educational/Research Use
+Released under the [MIT License](LICENSE).
 
 ## 👨‍💻 Author
 
